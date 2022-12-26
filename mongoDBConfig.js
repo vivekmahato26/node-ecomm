@@ -11,3 +11,4 @@ const client = new MongoClient(mongoUrl);
 const db = client.db(mongoDb);
 
 exports.addressCollection = db.collection("address");
+exports.cartCollection = db.collection("cart");
