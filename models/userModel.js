@@ -27,6 +27,11 @@ const userSchema = new mongoose.Schema({
         required: false,
         // ref: "ordersModel"
     },
+    cart: {
+        type: mongoose.SchemaTypes.String,
+        required: false,
+        // ref: "cartModel"
+    },
     address: {
         type: [mongoose.SchemaTypes.String],
         required: false,
