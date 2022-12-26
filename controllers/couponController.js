@@ -1,6 +1,6 @@
 const couponsModel = require("../models/couponsModel");
 const productsModel = require("../models/productsModel");
-// const usersModel = require("../models/usersModel");
+const usersModel = require("../models/userModel");
 
 exports.addCoupon = async (data) => {
     try {
@@ -23,11 +23,11 @@ exports.addCoupon = async (data) => {
          if(entity == "product") {
             const productUpdate = await productsModel.findByIdAndUpdate(entityId, {discount: couponId});
          }
-        //  if(entity == "user") {
-        //     const updateUser = await userModel.findByIdAndUpdate(entityId,{
-        //         $push:{coupon: couponId}
-        //     })
-        //  }
+         if(entity == "user") {
+            const updateUser = await usersModel.findByIdAndUpdate(entityId,{
+                $push:{coupon: couponId}
+            })
+         }
          return coupon;
     } catch (error) {
         return ({err:error.message});
@@ -47,6 +47,17 @@ exports.updateCoupon = async (data) => {
 exports.deleteCoupon = async (data) => {
     try {
         const { couponId } = data.params;
+        const {ref} = await couponsModel.findById(couponId);
+        const entity = ref.split("<=>")[0];
+         const entityId = ref.split("<=>")[1];
+         if(entity == "product") {
+            const productUpdate = await productsModel.findByIdAndUpdate(entityId, {discount: null});
+         }
+         if(entity == "user") {
+            const updateUser = await usersModel.findByIdAndUpdate(entityId,{
+                $pull:{coupon: couponId}
+            })
+         }
         const coupon = await couponsModel.findByIdAndDelete(couponId);
         return ({ msg: "Coupon Deleted" })
     } catch (error) {
