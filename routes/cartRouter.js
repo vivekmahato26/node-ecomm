@@ -84,3 +84,5 @@ cartRouter.get("/:cartId", async(req,res) => {
 //         res.send({err: error.message})
 //     }
 // })
+
+module.exports = cartRouter;

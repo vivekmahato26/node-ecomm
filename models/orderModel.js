@@ -18,12 +18,12 @@ const orderSchema = new Schema({
     },
     coupon: {
         type: SchemaTypes.ObjectId,
-        required: true,
+        required: false,
         ref: "couponsModel"
     },
     tax : {
         type: SchemaTypes.String,
-        required: true,
+        required: false,
     },
     taxId : {
         type: SchemaTypes.String,

@@ -1,0 +1,74 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <button id="rzp-button1">Pay</button>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script>
+        document.getElementById('rzp-button1').onclick = async function (e) {
+            const url = "http://localhost:8000/rzp/create";
+            const resp = await fetch(url, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                mode: 'cors',
+                cache: 'default',
+                body: JSON.stringify(
+                    { "amount": 100000, "currency": "INR", "receipt": "123456789", "cartId": "123", "userId": "1234","addressId":"1235" }
+                )
+            })
+            const data = await resp.json();
+            var options = {
+                "key": "rzp_test_O3q4Mu8OOLY9pG", // Enter the Key ID generated from the Dashboard
+                "amount": data.amount, "currency": data.currency, "receipt": data.receipt,
+                "name": "Acme Corp",
+                "description": "Test Transaction",
+                "order_id": data.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+                "handler": function (response) {
+                    console.log(response.razorpay_payment_id);
+                    console.log(response.razorpay_order_id);
+                    console.log(response.razorpay_signature);
+                    //send mail and sms 
+                    const apiUrl = "http://localhost:8000/rzp/paymentInfo";
+                    fetch(apiUrl, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        mode: 'cors',
+                        cache: 'default',
+                        body: JSON.stringify(
+                            { rzpPayId: response.razorpay_payment_id, rzpOrdId: response.razorpay_order_id, rzpPaySignature: response.razorpay_signature }
+                        )
+                    })
+                },
+                "notes": data.notes,
+                "theme": {
+                    "color": "#3399cc"
+                }
+            };
+            var rzp1 = new Razorpay(options);
+            rzp1.on('payment.failed', function (response) {
+                console.log(response.error.code);
+                console.log(response.error.description);
+                console.log(response.error.source);
+                console.log(response.error.step);
+                console.log(response.error.reason);
+                console.log(response.error.metadata.order_id);
+                console.log(response.error.metadata.payment_id);
+                //send mail and sms
+            });
+            rzp1.open();
+            e.preventDefault();
+        }
+    </script>
+</body>
+
+</html>
