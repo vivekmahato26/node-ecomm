@@ -6,9 +6,21 @@ const productRouter = new Router();
 
 productRouter.post("/create", async (req,res) => {
     try {
-        const response = await addProduct(req);
-        res.send(response);
-        res.end();
+        if(req.isAuth) {
+            if(req.access === "admin") {
+                const response = await addProduct(req);
+                res.send(response);
+                res.end();
+            } else {
+                const err = new Error("Unauthorized Access");
+                res.send({ err: err.message });
+                res.end();
+            }
+        } else {
+            const err = new Error("Unauthenticated Access");
+            res.send({ err: err.message });
+            res.end();
+        }
     } catch (error) {
         res.send({err: error.message});
         res.end();
@@ -26,9 +38,21 @@ productRouter.get("/all", async (req,res) => {
 })
 productRouter.patch("/update/:productId", async (req,res) => {
     try {
-        const response = await updateProduct(req);
-        res.send(response);
-        res.end();
+        if(req.isAuth) {
+            if(req.access === "admin") {
+                const response = await updateProduct(req);
+                res.send(response);
+                res.end();
+            } else {
+                const err = new Error("Unauthorized Access");
+                res.send({ err: err.message });
+                res.end();
+            }
+        } else {
+            const err = new Error("Unauthenticated Access");
+            res.send({ err: err.message });
+            res.end();
+        }
     } catch (error) {
         res.send({err: error.message});
         res.end();
@@ -36,9 +60,21 @@ productRouter.patch("/update/:productId", async (req,res) => {
 })
 productRouter.delete("/delete/:productId", async (req,res) => {
     try {
-        const response = await deleteProduct(req);
-        res.send(response);
-        res.end();
+        if(req.isAuth) {
+            if(req.access === "admin") {
+                const response = await deleteProduct(req);
+                res.send(response);
+                res.end();
+            } else {
+                const err = new Error("Unauthorized Access");
+                res.send({ err: err.message });
+                res.end();
+            }
+        } else {
+            const err = new Error("Unauthenticated Access");
+            res.send({ err: err.message });
+            res.end();
+        }
     } catch (error) {
         res.send({err: error.message});
         res.end();

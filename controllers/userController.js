@@ -34,7 +34,8 @@ exports.login = async (data) => {
             if (checkPass) {
                 const token = jwt.sign({
                     userId: checkEmail[0]._id,
-                    email: checkEmail[0].email
+                    email: checkEmail[0].email,
+                    access: checkEmail[0].access
                 }, process.env.JWT_SECRET, { expiresIn: "2d" })
                 return {
                     token,
