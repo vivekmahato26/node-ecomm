@@ -1,11 +1,10 @@
 import "../styles/header.css";
-import { Input, Select } from 'antd';
+import { Input, Select, Badge } from 'antd';
 import { BsSearch } from "react-icons/bs"
 import { MdCompareArrows } from "react-icons/md"
 import { AiOutlineHeart, AiOutlineShoppingCart, AiOutlineUser } from "react-icons/ai"
 const { Option } = Select;
-
-const Header = () => {
+const Header = (props) => {
     const selectBefore = (
         <Select defaultValue="All Categories">
             <Option>Women's</Option>
@@ -40,7 +39,12 @@ const Header = () => {
                     <ul>
                         <li><MdCompareArrows /> Compare</li>
                         <li><AiOutlineHeart /> Wishlist</li>
-                        <li><AiOutlineShoppingCart /> Cart</li>
+                        <li>
+                            <Badge count={props.cart.totalQuantity}>
+                                <AiOutlineShoppingCart />
+                            </Badge>
+                            Cart
+                        </li>
                         <li><AiOutlineUser /> Account</li>
                     </ul>
                 </div>

@@ -28,7 +28,7 @@ productRouter.post("/create", async (req,res) => {
 })
 productRouter.get("/all", async (req,res) => {
     try {
-        const response = await allProduct();
+        const response = await allProduct(req);
         res.send(response);
         res.end();
     } catch (error) {

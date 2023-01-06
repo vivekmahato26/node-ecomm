@@ -20,6 +20,7 @@ userRouter.post("/login",async (req,res) => {
         res.send(response);
         res.end();
     } catch (error) {
+        console.log(error)
         res.send({err: error.message});
         res.end();
     }
